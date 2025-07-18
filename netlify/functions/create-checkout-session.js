@@ -1,14 +1,11 @@
-// netlify/functions/create-checkout-session.js
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
+  console.log('Recebido event.body:', event.body);  // Log do corpo recebido
+
   try {
-    console.log('Recebido body:', event.body);
-
     const { name, price } = JSON.parse(event.body);
-
-    console.log('Dados extraídos:', { name, price });
-    console.log('Usando chave secreta:', process.env.STRIPE_SECRET_KEY ? 'Sim' : 'Não');
+    console.log('Nome:', name, 'Preço:', price);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -16,7 +13,7 @@ exports.handler = async (event) => {
         price_data: {
           currency: 'eur',
           product_data: { name },
-          unit_amount: price * 100, // Preço em cêntimos
+          unit_amount: price * 100, // preço em cêntimos
         },
         quantity: 1,
       }],
@@ -25,12 +22,11 @@ exports.handler = async (event) => {
       cancel_url: 'https://vendasrapidas.netlify.app/cancelado.html',
     });
 
-    console.log('Sessão criada:', session.id);
-
     return {
       statusCode: 200,
       body: JSON.stringify({ id: session.id }),
     };
+
   } catch (error) {
     console.error('Erro na criação da sessão:', error);
     return {
