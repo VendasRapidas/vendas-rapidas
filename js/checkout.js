@@ -1,24 +1,25 @@
-import stripe from './stripe.js';  // Importa a configuração do Stripe
+// checkout.js
+const stripe = Stripe('pk_live_51Rls9cCTAJQAvPL4M2VIWTBDXzUSLcTpR0z47iIluRGDSJ0XgUqEDtlJqlWplXXQi6VTOxImV9HteBIYiX8dOgyB00VDWG5w2t'); // Chave pública
 
 async function checkout(name, price) {
   try {
-    // Definir a URL dependendo de estarmos em desenvolvimento local ou produção
-    const url = window.location.hostname === 'localhost'
-      ? 'http://localhost:8888/.netlify/functions/create-checkout-session'  // URL para teste local
-      : '/.netlify/functions/create-checkout-session';  // URL para a função serverless em produção
+    // Verifica a URL dependendo se estamos em produção ou local
+    const url = window.location.hostname === 'localhost' 
+      ? 'http://localhost:4242/create-checkout-session'  // Para testes locais
+      : '/.netlify/functions/create-checkout-session';  // Para produção (Netlify)
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, price }),  // Envia os dados do produto (nome e preço)
+      body: JSON.stringify({ name, price }),  // Envia o nome e preço para o backend
     });
 
-    const data = await response.json();  // Resposta da função serverless
+    const data = await response.json();
 
     if (data.id) {
-      // Se a session ID for recebida, redireciona para o Stripe Checkout
+      // Redireciona para o checkout da Stripe usando a session ID recebida
       stripe.redirectToCheckout({ sessionId: data.id });
     } else {
       alert('Erro ao criar sessão de pagamento');
@@ -28,12 +29,3 @@ async function checkout(name, price) {
     alert('Erro ao processar o pagamento');
   }
 }
-
-// Se quiseres usar o código do checkout em um evento de clique no botão
-document.getElementById('checkout-button').addEventListener('click', function () {
-  const productName = 'Produto Teste';  // Nome do produto
-  const productPrice = 20;  // Preço em euros (substitui com o preço do teu produto)
-
-  // Chama a função de checkout
-  checkout(productName, productPrice);
-});
