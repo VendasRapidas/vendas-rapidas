@@ -32,10 +32,23 @@
                 <li>📞 Apoio por WhatsApp em qualquer etapa</li>
             </ul>
         </section>
+
+        <!-- Botão de pagamento -->
+        <section class="checkout">
+            <h3>Compre agora o seu produto</h3>
+            <button id="checkout-button" class="btn-pagar">Pagar Agora</button>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2025 Vendas Rápidas. Todos os direitos reservados.</p>
     </footer>
+
+    <!-- Carregar a biblioteca Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <!-- Carregar os scripts que configuram o checkout -->
+    <script src="/js/stripe.js"></script>
+    <script src="/js/checkout.js"></script>
 </body>
 </html>
