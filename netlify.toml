@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "echo 'No build step'"
   publish = "."
 
 [functions]
@@ -7,3 +7,5 @@
 
 [build.environment]
   NODE_VERSION = "18"
+
+
