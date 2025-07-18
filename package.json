@@ -4,8 +4,9 @@
   "description": "Backend para o site Vendas Rápidas",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
-  },
+  "start": "node index.js",
+  "build": "echo 'No build script defined' && exit 0"
+},
   
   "dependencies": {
     "cors": "^2.8.5",
