@@ -1,9 +1,8 @@
 [build]
-  command = "npm run build"  # ou o comando de build do seu projeto, se houver
-  publish = "."
+  publish = "public"       # pasta que contém seu HTML/CSS/JS
+  functions = "netlify/functions"  # onde suas funções estão
 
-[functions]
-  directory = "netlify/functions"  # Esta linha deve apontar para o diretório correto das funções
-
-[build.environment]
-  NODE_VERSION = "18"  # Certifique-se de que a versão do Node está configurada corretamente
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

@@ -79,16 +79,26 @@
             document
                 .getElementById("btn-comprar")
                 .addEventListener("click", () => {
-                    fetch("http://localhost:4242/create-checkout-session", {
+                    // Converter preço para centavos antes de enviar
+                    const precoCentavos = Math.round(produto.preco * 100);
+
+                    fetch("/.netlify/functions/create-checkout-session", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({ product: produto })
+                        body: JSON.stringify({ 
+                            name: produto.nome,
+                            price: precoCentavos
+                        })
                     })
                         .then((res) => res.json())
                         .then((data) => {
-                            window.location.href = data.url;
+                            if(data.url){
+                                window.location.href = data.url;
+                            } else {
+                                alert("Erro ao criar sessão de pagamento.");
+                            }
                         })
                         .catch((err) => {
                             alert("Erro ao criar sessão de pagamento.");
