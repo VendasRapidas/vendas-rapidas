@@ -1,1 +1,3 @@
 /backend
+# Local Netlify folder
+.netlify
