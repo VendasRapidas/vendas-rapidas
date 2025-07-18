@@ -3,6 +3,8 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   try {
+    console.log("URL_SITE:", process.env.URL_SITE); // Debug da URL do site
+
     const { name, price } = JSON.parse(event.body);
 
     if (!name || !price) {
