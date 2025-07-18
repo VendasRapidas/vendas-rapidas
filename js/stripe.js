@@ -1,8 +1,13 @@
-const stripe = Stripe('pk_live_51Rls9cCTAJQAvPL4M2VIWTBDXzUSLcTpR0z47iIluRGDSJ0XgUqEDtlJqlWplXXQi6VTOxImV9HteBIYiX8dOgyB00VDWG5w2t'); // ← Substitui com a tua chave pública do Stripe
+const stripe = Stripe('pk_live_51Rls9cCTAJQAvPL4M2VIWTBDXzUSLcTpR0z47iIluRGDSJ0XgUqEDtlJqlWplXXQi6VTOxImV9HteBIYiX8dOgyB00VDWG5w2t'); // Substitui com a tua chave pública do Stripe
 
 async function checkout(name, price) {
   try {
-    const response = await fetch('/.netlify/functions/create-checkout-session', {
+    // Definir a URL dependendo se estamos em localhost ou produção
+    const url = window.location.hostname === 'localhost' 
+      ? 'http://localhost:4242/create-checkout-session' // URL local para testes
+      : '/.netlify/functions/create-checkout-session'; // URL para a função no Netlify
+    
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
