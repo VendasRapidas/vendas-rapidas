@@ -1,6 +1,9 @@
 [build]
-  publish = "website"       # pasta que contém seu HTML/CSS/JS
-  functions = "netlify/functions"  # onde suas funções estão
+  publish = "website"
+  command = "echo 'No build script defined' && exit 0"
+
+[functions]
+  directory = "netlify/functions"
 
 [[redirects]]
   from = "/api/*"
