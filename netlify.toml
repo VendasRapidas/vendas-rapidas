@@ -1,5 +1,5 @@
 [build]
-  publish = "public"       # pasta que contém seu HTML/CSS/JS
+  publish = "website"       # pasta que contém seu HTML/CSS/JS
   functions = "netlify/functions"  # onde suas funções estão
 
 [[redirects]]
