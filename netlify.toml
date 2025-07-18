@@ -1,5 +1,5 @@
 [build]
-  publish = "website"
+  publish = "."        # publica a raiz da pasta website, que tem seu index.html etc
   command = "echo 'No build script defined' && exit 0"
 
 [functions]
