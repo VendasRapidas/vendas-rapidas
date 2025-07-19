@@ -1,9 +1,9 @@
-// netlify/functions/create-checkout-session.js
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   try {
-    console.log("URL_SITE:", process.env.URL_SITE); // Debug da URL do site
+    // Log para debugar a variável de ambiente
+    console.log("URL_SITE =", process.env.URL_SITE);
 
     const { name, price } = JSON.parse(event.body);
 
@@ -14,6 +14,16 @@ exports.handler = async (event) => {
       };
     }
 
+    // Garantir que a URL começa com https://
+    const baseUrl = process.env.URL_SITE;
+    if (!baseUrl || !baseUrl.startsWith("http")) {
+      console.error("Variável URL_SITE inválida:", baseUrl);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Configuração de URL_SITE inválida" }),
+      };
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -21,16 +31,14 @@ exports.handler = async (event) => {
         {
           price_data: {
             currency: "eur",
-            product_data: {
-              name,
-            },
-            unit_amount: price, // preço em centavos
+            product_data: { name },
+            unit_amount: price,
           },
           quantity: 1,
         },
       ],
-      success_url: `${process.env.URL_SITE}/sucesso.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.URL_SITE}/cancelado.html`,
+      success_url: `${baseUrl}/sucesso.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/cancelado.html`,
     });
 
     return {
