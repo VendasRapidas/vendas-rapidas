@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8" />
+    <title>Carrinho de Compras</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        img {
+            max-height: 80px;
+        }
+        button {
+            cursor: pointer;
+            padding: 6px 10px;
+            border: none;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 3px;
+        }
+        button:hover {
+            background-color: #b02a37;
+        }
+        #finalizar-compra {
+            margin-top: 20px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #finalizar-compra:hover {
+            background-color: #218838;
+        }
+        #msg-vazio {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        nav a {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>O teu Carrinho</h1>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="produtos.html">Produtos</a> |
+            <a href="carrinho.html">Carrinho</a> |
+            <a href="sobre.html">Sobre Nós</a>
+        </nav>
+    </header>
+
+    <main>
+        <div id="carrinho-container"></div>
+    </main>
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+        const stripe = Stripe('pk_live_51Rls9cCTAJQAvPL4M2VIWTBDXzUSLcTpR0z47iIluRGDSJ0XgUqEDtlJqlWplXXQi6VTOxImV9HteBIYiX8dOgyB00VDWG5w2t');
+
+        function mostrarCarrinho() {
+            const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+            const container = document.getElementById("carrinho-container");
+
+            if (carrinho.length === 0) {
+                container.innerHTML = '<p id="msg-vazio">O teu carrinho está vazio.</p>';
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Imagem</th>
+                            <th>Produto</th>
+                            <th>Preço Unitário</th>
+                            <th>Quantidade</th>
+                            <th>Subtotal</th>
+                            <th>Remover</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            let total = 0;
+            carrinho.forEach((item, index) => {
+                const subtotal = item.preco * item.quantidade;
+                total += subtotal;
+                html += `
+                    <tr>
+                        <td><img src="${item.imagem}" alt="${item.nome}" /></td>
+                        <td>${item.nome}</td>
+                        <td>€${item.preco.toFixed(2)}</td>
+                        <td>${item.quantidade}</td>
+                        <td>€${subtotal.toFixed(2)}</td>
+                        <td><button data-index="${index}">X</button></td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+                <h2>Total: €${total.toFixed(2)}</h2>
+                <button id="finalizar-compra">Finalizar Compra</button>
+            `;
+
+            container.innerHTML = html;
+
+            // Remover item
+            container.querySelectorAll("button[data-index]").forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    const idx = parseInt(e.target.getAttribute("data-index"));
+                    carrinho.splice(idx, 1);
+                    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+                    mostrarCarrinho();
+                });
+            });
+
+            // Finalizar compra
+            document.getElementById("finalizar-compra").addEventListener("click", () => {
+                criarSessaoStripe(carrinho);
+            });
+        }
+
+        function criarSessaoStripe(carrinho) {
+            if (carrinho.length === 0) {
+                alert("O carrinho está vazio.");
+                return;
+            }
+
+            // Preparar items para Stripe
+            const itemsStripe = carrinho.map(item => ({
+                price_data: {
+                    currency: "eur",
+                    product_data: {
+                        name: item.nome,
+                        images: [window.location.origin + "/" + item.imagem]
+                    },
+                    unit_amount: Math.round(item.preco * 100),
+                },
+                quantity: item.quantidade
+            }));
+
+            fetch("/.netlify/functions/create-checkout-session", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ items: itemsStripe })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.url) {
+                        window.location.href = data.url;
+                    } else {
+                        alert("Erro ao criar sessão de pagamento.");
+                    }
+                })
+                .catch(err => {
+                    alert("Erro ao criar sessão de pagamento.");
+                    console.error(err);
+                });
+        }
+
+        mostrarCarrinho();
+    </script>
+</body>
+</html>

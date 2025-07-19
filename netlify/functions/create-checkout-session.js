@@ -13,6 +13,7 @@ exports.handler = async (event) => {
 
     const baseUrl = process.env.URL_SITE;
     if (!baseUrl || !baseUrl.startsWith("http")) {
+      console.error("Variável URL_SITE inválida:", baseUrl);
       return {
         statusCode: 500,
         body: JSON.stringify({ error: "Configuração de URL_SITE inválida" }),
@@ -32,13 +33,14 @@ exports.handler = async (event) => {
           quantity: 1,
         },
       ],
-      success_url: `${baseUrl}/sucesso.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/cancelado.html`,
+      success_url: `${baseUrl}/`,        // Volta para a homepage depois de pagar
+      cancel_url: `${baseUrl}/carrinho.html`,  // Volta para carrinho se cancelar
+      // O email do comprador é enviado automaticamente pelo Stripe
     });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ url: session.url }), // <- CORRIGIDO AQUI
+      body: JSON.stringify({ id: session.id }),
     };
   } catch (error) {
     console.error("Erro ao criar sessão Stripe:", error);
