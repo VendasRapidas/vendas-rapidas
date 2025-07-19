@@ -2,8 +2,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   try {
-    console.log("URL_SITE =", process.env.URL_SITE);
-
     const { name, price } = JSON.parse(event.body);
 
     if (!name || !price) {
@@ -15,7 +13,6 @@ exports.handler = async (event) => {
 
     const baseUrl = process.env.URL_SITE;
     if (!baseUrl || !baseUrl.startsWith("http")) {
-      console.error("Variável URL_SITE inválida:", baseUrl);
       return {
         statusCode: 500,
         body: JSON.stringify({ error: "Configuração de URL_SITE inválida" }),
@@ -41,7 +38,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ id: session.id }),
+      body: JSON.stringify({ url: session.url }), // <- CORRIGIDO AQUI
     };
   } catch (error) {
     console.error("Erro ao criar sessão Stripe:", error);
