@@ -1,188 +1,219 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8" />
-    <title>Produto</title>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-        .galeria-detalhes img {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 5px;
-            max-height: 150px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            margin-right: 10px;
-        }
-        .galeria-detalhes img:hover {
-            transform: scale(1.1);
-            border-color: #007BFF;
-        }
-        #botoes-produto button {
-            margin-right: 10px;
-            padding: 10px 15px;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 4px;
-            border: none;
-            background-color: #007BFF;
-            color: white;
-        }
-        #botoes-produto button:hover {
-            background-color: #0056b3;
-        }
-        #seletor-cor {
-            margin-top: 15px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Produto</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .galeria-detalhes img {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 5px;
+      max-height: 150px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      margin-right: 10px;
+    }
+    .galeria-detalhes img:hover {
+      transform: scale(1.1);
+      border-color: #007BFF;
+    }
+    #botoes-produto button {
+      margin-right: 10px;
+      padding: 10px 15px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+    }
+    #botoes-produto button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Detalhes do Produto</h1>
-        <nav>
-            <a href="index.html">Home</a> |
-            <a href="produtos.html">Produtos</a> |
-            <a href="carrinho.html">Carrinho</a> |
-            <a href="sobre.html">Sobre Nós</a>
-        </nav>
-    </header>
+  <header>
+    <h1>Detalhes do Produto</h1>
+    <nav>
+      <a href="index.html">Home</a> |
+      <a href="produtos.html">Produtos</a> |
+      <a href="carrinho.html">Carrinho</a> |
+      <a href="sobre.html">Sobre Nós</a>
+    </nav>
+  </header>
 
-    <main>
-        <div id="produto-detalhes"></div>
-    </main>
+  <main>
+    <div id="produto-detalhes"></div>
+  </main>
 
-    <script>
-        const produtos = {
-            1: {
-                nome: "Garrafa de Plástico",
-                preco: 2.99,
-                imagens: ["imagens/GarrafaPlastico1.avif", "imagens/GarrafaPlastico2.avif", "imagens/GarrafaPlastico3.avif"],
-                descricao: "Garrafa de Plástico Portátil de 2L, contém canudo, é reutilizável, pode ir à máquina de lavar.",
-                cores: ["Preto", "Rosa", "Roxo", "Azul", "Verde"] // NOVO
-            },
-            2: {
-                nome: "Repelente ultrassônico de pragas",
-                preco: 7.00,
-                imagens: ["imagens/Repelente1.avif", "imagens/Repelente2.avif", "imagens/Repelente3.avif", "imagens/Repelente4.avif"],
-                descricao: "Repelente ultrassônico de pragas para ambientes internos, plug-in."
-            },
-            3: {
-                nome: "Fones de ouvido Bluetooth",
-                preco: 4.99,
-                imagens: ["imagens/Fones1.avif", "imagens/Fones2.avif", "imagens/Fones3.avif"],
-                descricao: "Fones de ouvido Bluetooth com redução de ruído."
-            },
-            4: {
-                nome: "Rato Óptico Steelseries Rival 5",
-                preco: 39.99,
-                imagens: ["imagens/Rato1.jpg", "imagens/Rato2.jpg"],
-                descricao: "Rato para jogos de precisão, 9 botões programáveis."
-            },
-            5: {
-                nome: "Monitor de vídeo para bebés",
-                preco: 40.00,
-                imagens: ["imagens/bebe1.avif", "imagens/bebe2.avif", "imagens/bebe3.avif"],
-                descricao: "Monitor de vídeo para bebés, com visão norturna e bateria de alta duração"
-            },
-            6: {
-                nome: "Berço de bebé portátil",
-                preco: 24.99,
-                imagens: ["imagens/berco1.avif", "imagens/berco2.avif", "imagens/berco3.avif"],
-                descricao: "Berço portátil leve, ideal para viagens.",
-                cores: ["Rosa", "Preto", "Azul", "Verde", "Cinzento"] // NOVO
-            },
-            7: {
-                nome: "Painel Solar portátil",
-                preco: 14.99,
-                imagens: ["imagens/painel1.avif", "imagens/painel2.avif", "imagens/painel3.avif"],
-                descricao: "Painel solar portátil, ideal para telemóveis."
-            }
+  <script>
+    const produtos = {
+      1: {
+        nome: "Garrafa de Plástico",
+        preco: 2.99,
+        imagens: [
+          "imagens/GarrafaPlastico1.avif",
+          "imagens/GarrafaPlastico2.avif",
+          "imagens/GarrafaPlastico3.avif"
+        ],
+        cores: ["Preto", "Rosa", "Roxo", "Azul", "Verde"],
+        descricao: "Garrafa de Plástico Portátil de 2L, com canudo, reutilizável, pode ir à máquina de lavar."
+      },
+      2: {
+        nome: "Repelente ultrassônico de pragas",
+        preco: 7.00,
+        imagens: [
+          "imagens/Repelente1.avif",
+          "imagens/Repelente2.avif",
+          "imagens/Repelente3.avif",
+          "imagens/Repelente4.avif"
+        ],
+        descricao: "Repelente ultrassônico plug-in contra pragas como mosquitos, baratas e ratos."
+      },
+      3: {
+        nome: "Fones de ouvido Bluetooth",
+        preco: 4.99,
+        imagens: [
+          "imagens/Fones1.avif",
+          "imagens/Fones2.avif",
+          "imagens/Fones3.avif"
+        ],
+        descricao: "Fones estéreo Bluetooth 5.3 com bateria de longa duração."
+      },
+      4: {
+        nome: "Rato Óptico Steelseries Rival 5 18000DPI Preto",
+        preco: 39.99,
+        imagens: [
+          "imagens/Rato1.jpg",
+          "imagens/Rato2.jpg"
+        ],
+        descricao: "Rato de precisão com 9 botões programáveis e botão de ação rápida."
+      },
+      5: {
+        nome: "Monitor de vídeo para bebés",
+        preco: 40.00,
+        imagens: [
+          "imagens/bebe1.avif",
+          "imagens/bebe2.avif",
+          "imagens/bebe3.avif"
+        ],
+        descricao: "Monitor sem fios 2.4G, visor LCD 3,2'', áudio bidirecional e visão noturna."
+      },
+      6: {
+        nome: "Berço de bebé portátil",
+        preco: 24.99,
+        imagens: [
+          "imagens/berco1.avif",
+          "imagens/berco2.avif",
+          "imagens/berco3.avif"
+        ],
+        cores: ["Rosa", "Preto", "Azul", "Verde", "Cinza"],
+        descricao: "Berço leve e portátil, ideal para viagens. Alta capacidade de armazenamento."
+      },
+      7: {
+        nome: "Painel Solar portátil",
+        preco: 14.99,
+        imagens: [
+          "imagens/painel1.avif",
+          "imagens/painel2.avif",
+          "imagens/painel3.avif"
+        ],
+        descricao: "Painel solar portátil para carregar telemóveis e outros dispositivos."
+      }
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+    const produto = produtos[id];
+
+    if (produto) {
+      let imagensHTML = produto.imagens.map(img => `<img src="${img}" alt="${produto.nome}">`).join("");
+      let corSelect = "";
+
+      if (produto.cores) {
+        corSelect = `
+          <label for="cor">Cor:</label>
+          <select id="cor">
+            ${produto.cores.map(c => `<option value="${c}">${c}</option>`).join("")}
+          </select><br><br>
+        `;
+      }
+
+      document.getElementById("produto-detalhes").innerHTML = `
+        <div class="galeria-detalhes">${imagensHTML}</div>
+        <h2>${produto.nome}</h2>
+        <p>${produto.descricao}</p>
+        <p><strong>Preço:</strong> €${produto.preco.toFixed(2)}</p>
+        ${corSelect}
+        <div id="botoes-produto">
+          <button id="btn-adicionar-carrinho">Adicionar ao Carrinho</button>
+          <button id="btn-comprar">Comprar com Stripe</button>
+        </div>
+      `;
+
+      document.getElementById("btn-adicionar-carrinho").addEventListener("click", () => {
+        const cor = document.getElementById("cor")?.value || "";
+        const nomeComCor = cor ? `${produto.nome} (${cor})` : produto.nome;
+
+        const item = {
+          id,
+          nome: nomeComCor,
+          preco: produto.preco,
+          imagem: produto.imagens[0],
+          quantidade: 1
         };
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get("id");
-        const produto = produtos[id];
+        const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+        const itemExistente = carrinho.find(p => p.id === id && p.nome === nomeComCor);
 
-        if (produto) {
-            let imagensHTML = produto.imagens.map((img) => `<img src="${img}" alt="${produto.nome}" />`).join("");
-
-            let seletorCores = "";
-            if (produto.cores) {
-                seletorCores = `
-                    <label for="cor">Escolhe uma cor:</label>
-                    <select id="cor">
-                        ${produto.cores.map(cor => `<option value="${cor}">${cor}</option>`).join("")}
-                    </select>
-                `;
-            }
-
-            document.getElementById("produto-detalhes").innerHTML = `
-                <div class="galeria-detalhes">${imagensHTML}</div>
-                <h2>${produto.nome}</h2>
-                <p>${produto.descricao}</p>
-                <p><strong>Preço:</strong> €${produto.preco.toFixed(2)}</p>
-                <div id="seletor-cor">${seletorCores}</div>
-                <div id="botoes-produto">
-                    <button id="btn-adicionar-carrinho">Adicionar ao Carrinho</button>
-                    <button id="btn-comprar">Comprar com Stripe</button>
-                </div>
-            `;
-
-            document.getElementById("btn-adicionar-carrinho").addEventListener("click", () => {
-                const corSelecionada = produto.cores ? document.getElementById("cor").value : null;
-
-                const item = {
-                    id,
-                    nome: produto.nome,
-                    preco: produto.preco,
-                    imagem: produto.imagens[0],
-                    quantidade: 1,
-                    cor: corSelecionada // NOVO
-                };
-
-                const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-                const itemExistente = carrinho.find(p => p.id === id && p.cor === corSelecionada);
-
-                if (itemExistente) {
-                    itemExistente.quantidade += 1;
-                } else {
-                    carrinho.push(item);
-                }
-
-                localStorage.setItem("carrinho", JSON.stringify(carrinho));
-                alert("Produto adicionado ao carrinho!");
-            });
-
-            document.getElementById("btn-comprar").addEventListener("click", () => {
-                const precoCentavos = Math.round(produto.preco * 100);
-                const corSelecionada = produto.cores ? document.getElementById("cor").value : null;
-
-                fetch("/.netlify/functions/create-checkout-session", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ 
-                        name: produto.nome + (corSelecionada ? ` (${corSelecionada})` : ""),
-                        price: precoCentavos
-                    })
-                })
-                .then((res) => res.json())
-                .then((data) => {
-                    if(data.id){
-                        window.location.href = `https://checkout.stripe.com/pay/${data.id}`;
-                    } else {
-                        alert("Erro ao criar sessão de pagamento.");
-                    }
-                })
-                .catch((err) => {
-                    alert("Erro ao criar sessão de pagamento.");
-                    console.error(err);
-                });
-            });
+        if (itemExistente) {
+          itemExistente.quantidade += 1;
         } else {
-            document.getElementById("produto-detalhes").innerHTML = "<p>Produto não encontrado.</p>";
+          carrinho.push(item);
         }
-    </script>
+
+        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+        alert("Produto adicionado ao carrinho!");
+      });
+
+      document.getElementById("btn-comprar").addEventListener("click", () => {
+        const cor = document.getElementById("cor")?.value || "";
+        const nomeComCor = cor ? `${produto.nome} (${cor})` : produto.nome;
+        const precoCentavos = Math.round(produto.preco * 100);
+
+        fetch("/.netlify/functions/create-checkout-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            items: [
+              {
+                name: nomeComCor,
+                price: precoCentavos,
+                quantity: 1
+              }
+            ]
+          })
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.id) {
+              window.location.href = `https://checkout.stripe.com/pay/${data.id}`;
+            } else {
+              alert("Erro ao criar sessão de pagamento.");
+            }
+          })
+          .catch((err) => {
+            alert("Erro ao criar sessão de pagamento.");
+            console.error(err);
+          });
+      });
+    } else {
+      document.getElementById("produto-detalhes").innerHTML = "<p>Produto não encontrado.</p>";
+    }
+  </script>
 </body>
 </html>
