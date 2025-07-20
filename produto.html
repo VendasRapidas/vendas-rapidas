@@ -31,6 +31,9 @@
         #botoes-produto button:hover {
             background-color: #0056b3;
         }
+        #seletor-cor {
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -53,74 +56,41 @@
             1: {
                 nome: "Garrafa de Plástico",
                 preco: 2.99,
-                imagens: [
-                    "imagens/GarrafaPlastico1.avif",
-                    "imagens/GarrafaPlastico2.avif",
-                    "imagens/GarrafaPlastico3.avif"
-                ],
-                descricao:
-                    "Garrafa de Plástico Portátil de 2L, contém canudo, é reutilizável, pode ir à máquina de lavar. Disponível nas cores: Preto, Rosa, Roxo, Azul e Verde"
+                imagens: ["imagens/GarrafaPlastico1.avif", "imagens/GarrafaPlastico2.avif", "imagens/GarrafaPlastico3.avif"],
+                descricao: "Garrafa de Plástico Portátil de 2L, contém canudo, é reutilizável, pode ir à máquina de lavar.",
+                cores: ["Preto", "Rosa", "Roxo", "Azul", "Verde"] // NOVO
             },
             2: {
                 nome: "Repelente ultrassônico de pragas",
                 preco: 7.00,
-                imagens: [
-                    "imagens/Repelente1.avif",
-                    "imagens/Repelente2.avif",
-                    "imagens/Repelente3.avif",
-                    "imagens/Repelente4.avif"
-                ],
-                descricao: "Repelente ultrassônico de pragas para ambientes internos, plug-in, repelente de pragas, pulgas, insetos, mosquitos, ratos, ratos, aranhas, formigas, baratas, insetos"
+                imagens: ["imagens/Repelente1.avif", "imagens/Repelente2.avif", "imagens/Repelente3.avif", "imagens/Repelente4.avif"],
+                descricao: "Repelente ultrassônico de pragas para ambientes internos, plug-in."
             },
             3: {
                 nome: "Fones de ouvido Bluetooth",
                 preco: 4.99,
-                imagens: [
-                    "imagens/Fones1.avif",
-                    "imagens/Fones2.avif",
-                    "imagens/Fones3.avif"
-                ],
-                descricao: "Fones de ouvido Bluetooth, redução de ruído estéreo, versão Bluetooth 5.30, música de alta definição, bateria de longa duração"
+                imagens: ["imagens/Fones1.avif", "imagens/Fones2.avif", "imagens/Fones3.avif"],
+                descricao: "Fones de ouvido Bluetooth com redução de ruído."
             },
             4: {
-                nome: "Rato Óptico Steelseries Rival 5 18000DPI Preto",
+                nome: "Rato Óptico Steelseries Rival 5",
                 preco: 39.99,
-                imagens: [
-                    "imagens/Rato1.jpg",
-                    "imagens/Rato2.jpg"
-                ],
-                descricao: "Domine em qualquer jogo que você jogar. O Rival 5 é o rato para jogos de precisão mais versátil. Personalize os seus 9 botões programáveis para se adequar ao seu jogo, incluindo o botão de alternância de ação rápida personalizado que é construído para execuções de reação extremamente rápidas."
+                imagens: ["imagens/Rato1.jpg", "imagens/Rato2.jpg"],
+                descricao: "Rato para jogos de precisão, 9 botões programáveis."
             },
             5: {
-                nome: "Monitor de vídeo para bebés",
-                preco: 40.00,
-                imagens: [
-                    "imagens/bebe1.avif",
-                    "imagens/bebe2.avif",
-                    "imagens/bebe3.avif"
-                ],
-                descricao: "Monitor de vídeo para bebés,Vigilância sem fios 2.4G,LCD de 3,2 polegadas,Conversa áudio bidirecional,Visão nocturna"
-            },
-        5: {
-                nome: "Berço de bebe portátil",
+                nome: "Berço de bebé portátil",
                 preco: 24.99,
-                imagens: [
-                    "imagens/berco1.avif",
-                    "imagens/berco2.avif",
-                    "imagens/berco3.avif"
-                ],
-                descricao: "Berço portátil leve, com grande capacidade, ideal para viagens, disponivel em rosa, preto, azul, verde, cizento"
-        },
-        6: {
+                imagens: ["imagens/berco1.avif", "imagens/berco2.avif", "imagens/berco3.avif"],
+                descricao: "Berço portátil leve, ideal para viagens.",
+                cores: ["Rosa", "Preto", "Azul", "Verde", "Cinzento"] // NOVO
+            },
+            6: {
                 nome: "Painel Solar portátil",
                 preco: 14.99,
-                imagens: [
-                    "imagens/painel1.avif",
-                    "imagens/painel2.avif",
-                    "imagens/painel3.avif"
-                ],
-                descricao: "Painel solar portátil, com grande capacidade, ideal para viagens, ideal para telemóveis"
-        },
+                imagens: ["imagens/painel1.avif", "imagens/painel2.avif", "imagens/painel3.avif"],
+                descricao: "Painel solar portátil, ideal para telemóveis."
+            }
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -128,18 +98,24 @@
         const produto = produtos[id];
 
         if (produto) {
-            let imagensHTML = produto.imagens
-                .map(
-                    (img) =>
-                        `<img src="${img}" alt="${produto.nome}" />`
-                )
-                .join("");
+            let imagensHTML = produto.imagens.map((img) => `<img src="${img}" alt="${produto.nome}" />`).join("");
+
+            let seletorCores = "";
+            if (produto.cores) {
+                seletorCores = `
+                    <label for="cor">Escolhe uma cor:</label>
+                    <select id="cor">
+                        ${produto.cores.map(cor => `<option value="${cor}">${cor}</option>`).join("")}
+                    </select>
+                `;
+            }
 
             document.getElementById("produto-detalhes").innerHTML = `
                 <div class="galeria-detalhes">${imagensHTML}</div>
                 <h2>${produto.nome}</h2>
                 <p>${produto.descricao}</p>
                 <p><strong>Preço:</strong> €${produto.preco.toFixed(2)}</p>
+                <div id="seletor-cor">${seletorCores}</div>
                 <div id="botoes-produto">
                     <button id="btn-adicionar-carrinho">Adicionar ao Carrinho</button>
                     <button id="btn-comprar">Comprar com Stripe</button>
@@ -147,16 +123,19 @@
             `;
 
             document.getElementById("btn-adicionar-carrinho").addEventListener("click", () => {
+                const corSelecionada = produto.cores ? document.getElementById("cor").value : null;
+
                 const item = {
                     id,
                     nome: produto.nome,
                     preco: produto.preco,
                     imagem: produto.imagens[0],
-                    quantidade: 1
+                    quantidade: 1,
+                    cor: corSelecionada // NOVO
                 };
 
                 const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-                const itemExistente = carrinho.find(p => p.id === id);
+                const itemExistente = carrinho.find(p => p.id === id && p.cor === corSelecionada);
 
                 if (itemExistente) {
                     itemExistente.quantidade += 1;
@@ -170,6 +149,7 @@
 
             document.getElementById("btn-comprar").addEventListener("click", () => {
                 const precoCentavos = Math.round(produto.preco * 100);
+                const corSelecionada = produto.cores ? document.getElementById("cor").value : null;
 
                 fetch("/.netlify/functions/create-checkout-session", {
                     method: "POST",
@@ -177,26 +157,25 @@
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({ 
-                        name: produto.nome,
+                        name: produto.nome + (corSelecionada ? ` (${corSelecionada})` : ""),
                         price: precoCentavos
                     })
                 })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if(data.id){
-                            window.location.href = `https://checkout.stripe.com/pay/${data.id}`;
-                        } else {
-                            alert("Erro ao criar sessão de pagamento.");
-                        }
-                    })
-                    .catch((err) => {
+                .then((res) => res.json())
+                .then((data) => {
+                    if(data.id){
+                        window.location.href = `https://checkout.stripe.com/pay/${data.id}`;
+                    } else {
                         alert("Erro ao criar sessão de pagamento.");
-                        console.error(err);
-                    });
+                    }
+                })
+                .catch((err) => {
+                    alert("Erro ao criar sessão de pagamento.");
+                    console.error(err);
+                });
             });
         } else {
-            document.getElementById("produto-detalhes").innerHTML =
-                "<p>Produto não encontrado.</p>";
+            document.getElementById("produto-detalhes").innerHTML = "<p>Produto não encontrado.</p>";
         }
     </script>
 </body>
