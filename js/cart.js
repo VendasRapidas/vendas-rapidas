@@ -4,8 +4,9 @@
 function adicionarAoCarrinho(produto) {
   let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
 
-  // Verifica se já existe o produto no carrinho
-  const index = carrinho.findIndex(item => item.id === produto.id);
+  // Verifica se já existe o mesmo produto com a mesma cor
+  const index = carrinho.findIndex(item => item.id === produto.id && item.cor === produto.cor);
+
   if (index !== -1) {
     carrinho[index].quantidade += 1;
   } else {
@@ -21,61 +22,80 @@ function obterCarrinho() {
   return JSON.parse(localStorage.getItem("carrinho")) || [];
 }
 
-// Limpar carrinho (usar após checkout ou botão "Esvaziar Carrinho")
+// Limpar carrinho (após checkout ou botão "Esvaziar Carrinho")
 function limparCarrinho() {
   localStorage.removeItem("carrinho");
 }
 
-create-checkout-session.js
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+// Renderizar o carrinho na página carrinho.html
+function mostrarCarrinho() {
+  const carrinho = obterCarrinho();
+  const container = document.getElementById("carrinho");
+  const totalSpan = document.getElementById("total");
 
-exports.handler = async (event) => {
+  if (!container || !totalSpan) return;
+
+  container.innerHTML = "";
+  let total = 0;
+
+  if (carrinho.length === 0) {
+    container.innerHTML = "<p>O carrinho está vazio.</p>";
+    totalSpan.textContent = "0.00 €";
+    return;
+  }
+
+  carrinho.forEach((item, index) => {
+    const subtotal = (item.price * item.quantidade) / 100;
+    total += subtotal;
+
+    const itemDiv = document.createElement("div");
+    itemDiv.className = "item-carrinho";
+    itemDiv.innerHTML = `
+      <p><strong>${item.name}</strong> (${item.cor || "sem cor"})</p>
+      <p>Quantidade: ${item.quantidade}</p>
+      <p>Preço: ${(item.price / 100).toFixed(2)} €</p>
+      <p>Subtotal: ${subtotal.toFixed(2)} €</p>
+      <button onclick="removerDoCarrinho(${index})">Remover</button>
+      <hr>
+    `;
+    container.appendChild(itemDiv);
+  });
+
+  totalSpan.textContent = `${total.toFixed(2)} €`;
+}
+
+// Remover item individual do carrinho
+function removerDoCarrinho(index) {
+  let carrinho = obterCarrinho();
+  carrinho.splice(index, 1);
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  mostrarCarrinho();
+}
+
+// Enviar para Stripe Checkout
+async function pagarCarrinho() {
+  const carrinho = obterCarrinho();
+  if (carrinho.length === 0) {
+    alert("O carrinho está vazio.");
+    return;
+  }
+
   try {
-    const { name, price } = JSON.parse(event.body);
-
-    if (!name || !price) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "Dados do produto incompletos" }),
-      };
-    }
-
-    const baseUrl = process.env.URL_SITE;
-    if (!baseUrl || !baseUrl.startsWith("http")) {
-      console.error("Variável URL_SITE inválida:", baseUrl);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: "Configuração de URL_SITE inválida" }),
-      };
-    }
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      line_items: [
-        {
-          price_data: {
-            currency: "eur",
-            product_data: { name },
-            unit_amount: price,
-          },
-          quantity: 1,
-        },
-      ],
-      success_url: ${baseUrl}/,        // Volta para a homepage depois de pagar
-      cancel_url: ${baseUrl}/carrinho.html,  // Volta para carrinho se cancelar
-      // O email do comprador é enviado automaticamente pelo Stripe
+    const response = await fetch("/.netlify/functions/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: carrinho })
     });
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ id: session.id }),
-    };
+    const data = await response.json();
+
+    if (data.id) {
+      window.location.href = `https://checkout.stripe.com/pay/${data.id}`;
+    } else {
+      alert("Erro ao criar sessão de pagamento.");
+    }
   } catch (error) {
-    console.error("Erro ao criar sessão Stripe:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Erro ao criar sessão de pagamento" }),
-    };
+    console.error("Erro ao processar pagamento:", error);
+    alert("Erro ao processar pagamento.");
   }
-};
+}
