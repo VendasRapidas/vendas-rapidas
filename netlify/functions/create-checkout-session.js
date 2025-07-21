@@ -36,10 +36,7 @@ exports.handler = async (event) => {
       mode: "payment",
       shipping_address_collection: {
         allowed_countries: ["PT"],
-      },
-      line_items,
-      success_url: `${baseUrl}/sucesso.html`,
-      cancel_url: `${baseUrl}/carrinho.html`,
+      }
     });
 
     return {
