@@ -24,9 +24,9 @@ exports.handler = async (event) => {
       price_data: {
         currency: "eur",
         product_data: {
-          name: item.name,
+          name: item.name + (item.color ? ` (${item.color})` : ""),
         },
-        unit_amount: item.price, // já vem em cêntimos
+        unit_amount: item.price,
       },
       quantity: item.quantity || 1,
     }));
@@ -35,7 +35,7 @@ exports.handler = async (event) => {
       payment_method_types: ["card"],
       mode: "payment",
       shipping_address_collection: {
-        allowed_countries: ["PT"], // Apenas Portugal
+        allowed_countries: ["PT"],
       },
       line_items,
       success_url: `${baseUrl}/sucesso.html`,
