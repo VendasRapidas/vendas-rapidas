@@ -24,7 +24,7 @@ exports.handler = async (event) => {
       price_data: {
         currency: "eur",
         product_data: {
-          name: item.name + (item.color ? ` (${item.color})` : ""),
+          name: item.name, // já vem com a cor, se houver
         },
         unit_amount: item.price,
       },
