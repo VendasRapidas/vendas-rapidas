@@ -11,25 +11,24 @@ exports.handler = async (event) => {
       };
     }
 
-    const baseUrl = process.env.URL_SITE;
-    if (!baseUrl || !baseUrl.startsWith("http")) {
-      console.error("Variável URL_SITE inválida:", baseUrl);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: "URL_SITE mal configurado" }),
-      };
-    }
+    const line_items = items.map((item) => {
+      const priceInCents = parseInt(item.price);
 
-    const line_items = items.map(item => ({
-      price_data: {
-        currency: "eur",
-        product_data: {
-          name: item.name, // já vem com a cor, se houver
+      if (isNaN(priceInCents)) {
+        throw new Error(`Preço inválido para o produto: ${item.name}`);
+      }
+
+      return {
+        price_data: {
+          currency: "eur",
+          product_data: {
+            name: item.name + (item.color ? ` (${item.color})` : ""),
+          },
+          unit_amount: priceInCents,
         },
-        unit_amount: item.price,
-      },
-      quantity: item.quantity || 1,
-    }));
+        quantity: item.quantity || 1,
+      };
+    });
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -37,10 +36,10 @@ exports.handler = async (event) => {
       shipping_address_collection: {
         allowed_countries: ["PT"],
       },
-  line_items,
-  success_url: `${baseUrl}/sucesso.html`,
-  cancel_url: `${baseUrl}/carrinho.html`,
-});
+      line_items,
+      success_url: `${process.env.URL_SITE}/sucesso.html`,
+      cancel_url: `${process.env.URL_SITE}/carrinho.html`,
+    });
 
     return {
       statusCode: 200,
@@ -50,7 +49,7 @@ exports.handler = async (event) => {
     console.error("Erro ao criar sessão Stripe:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Erro ao criar sessão de pagamento" }),
+      body: JSON.stringify({ error: error.message || "Erro desconhecido" }),
     };
   }
 };
