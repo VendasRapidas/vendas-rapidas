@@ -1,0 +1,21 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "Tomar",
+			"country": {
+				"code": "PT",
+				"name": "Portugal"
+			},
+			"subdivision": {
+				"code": "14",
+				"name": "Santarém"
+			},
+			"timezone": "Europe/Lisbon",
+			"latitude": 39.6018,
+			"longitude": -8.4104,
+			"postalCode": "2300-359"
+		},
+		"timestamp": 1752862268316
+	},
+	"siteId": "e8cc5ccf-f452-4c7c-817d-bbc8675a5283"
+}

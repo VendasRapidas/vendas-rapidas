@@ -1,0 +1,31 @@
+functionsDirectory = "C:\\Users\\roxod\\Desktop\\website\\netlify\\functions"
+functionsDirectoryOrigin = "config"
+plugins = []
+headers = []
+redirects = []
+
+[build]
+publish = "C:\\Users\\roxod\\Desktop\\website"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "echo 'No build step'"
+functions = "C:\\Users\\roxod\\Desktop\\website\\netlify\\functions"
+
+[build.environment]
+NODE_VERSION = "18"
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[functions]
+
+[functions."*"]
