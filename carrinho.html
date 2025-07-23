@@ -138,43 +138,38 @@
         }
 
         function criarSessaoStripe(carrinho) {
-            if (carrinho.length === 0) {
-                alert("O carrinho está vazio.");
-                return;
+    if (carrinho.length === 0) {
+        alert("O carrinho está vazio.");
+        return;
+    }
+
+    const items = carrinho.map(item => ({
+        name: item.nome,
+        color: item.cor || "Padrão",
+        price: Math.round(item.preco * 100), // em cêntimos
+        quantity: item.quantidade
+    }));
+
+    fetch("/.netlify/functions/create-checkout-session", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ items })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                alert("Erro ao criar sessão de pagamento.");
             }
-
-            const itemsStripe = carrinho.map(item => ({
-                price_data: {
-                    currency: "eur",
-                    product_data: {
-                        name: `${item.nome} (${item.cor || "cor padrão"})`,
-                        images: [window.location.origin + "/" + item.imagem]
-                    },
-                    unit_amount: Math.round(item.preco * 100),
-                },
-                quantity: item.quantidade
-            }));
-
-            fetch("/.netlify/functions/create-checkout-session", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ items: itemsStripe })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.url) {
-                        window.location.href = data.url;
-                    } else {
-                        alert("Erro ao criar sessão de pagamento.");
-                    }
-                })
-                .catch(err => {
-                    alert("Erro ao criar sessão de pagamento.");
-                    console.error(err);
-                });
-        }
+        })
+        .catch(err => {
+            alert("Erro ao criar sessão de pagamento.");
+            console.error(err);
+        });
+}
 
         mostrarCarrinho();
     </script>

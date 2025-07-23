@@ -42,9 +42,9 @@ exports.handler = async (event) => {
     });
 
     return {
-      statusCode: 200,
-      body: JSON.stringify({ id: session.id }),
-    };
+  statusCode: 200,
+  body: JSON.stringify({ url: session.url }),
+};
   } catch (error) {
     console.error("Erro ao criar sessão Stripe:", error);
     return {
