@@ -149,7 +149,6 @@
         ${corSelect}
         <div id="botoes-produto">
           <button id="btn-adicionar-carrinho">Adicionar ao Carrinho</button>
-          <button id="btn-comprar">Comprar com Stripe</button>
         </div>
       `;
 
@@ -176,40 +175,6 @@
 
         localStorage.setItem("carrinho", JSON.stringify(carrinho));
         alert("Produto adicionado ao carrinho!");
-      });
-
-      document.getElementById("btn-comprar").addEventListener("click", () => {
-        const cor = document.getElementById("cor")?.value || "";
-        const nomeComCor = cor ? `${produto.nome} (${cor})` : produto.nome;
-        const precoCentavos = Math.round(produto.preco * 100);
-
-        fetch("/.netlify/functions/create-checkout-session", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            items: [
-              {
-                name: nomeComCor,
-                price: precoCentavos,
-                quantity: 1
-              }
-            ]
-          })
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.id) {
-              window.location.href = `https://checkout.stripe.com/pay/${data.id}`;
-            } else {
-              alert("Erro ao criar sessão de pagamento.");
-            }
-          })
-          .catch((err) => {
-            alert("Erro ao criar sessão de pagamento.");
-            console.error(err);
-          });
       });
     } else {
       document.getElementById("produto-detalhes").innerHTML = "<p>Produto não encontrado.</p>";
